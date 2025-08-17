@@ -1,0 +1,12 @@
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Visual Studio Code
+.vscode/*
+
+# System files
+.DS_Store
+Thumbs.db
