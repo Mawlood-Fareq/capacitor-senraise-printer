@@ -16,11 +16,11 @@
     "@capacitor/core": "^3.0.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.1.5",
     "rollup": "^2.39.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
-    "@rollup/plugin-commonjs": "^17.1.0"
+    "typescript": "^4.1.5"
   },
   "files": [
     "dist/",
