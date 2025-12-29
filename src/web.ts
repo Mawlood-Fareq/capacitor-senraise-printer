@@ -1,8 +1,16 @@
 import { WebPlugin } from '@capacitor/core';
-
 import type { PrinterPlugin } from './definitions';
+import type { PluginListenerHandle } from '@capacitor/core';
 
 export class PrinterWeb extends WebPlugin implements PrinterPlugin {
+  
+  async addListener(
+    eventName: string,
+    listenerFunc: (...args: any[]) => void,
+  ): Promise<PluginListenerHandle> {
+    throw this.unimplemented('addListener not implemented on web.');
+  }
+
   async checkStatus(): Promise<{ isConnected: boolean }> {
     return Promise.resolve({ isConnected: false });
   }

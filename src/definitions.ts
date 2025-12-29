@@ -1,7 +1,7 @@
 import type { PluginListenerHandle } from '@capacitor/core';
-export interface PrinterStatus {
-  status: string;
-}
+
+export interface PrinterStatus { status: string }
+
 export interface PrinterPlugin {
   checkStatus(): Promise<{ isConnected: boolean }>;
   start(): Promise<void>;
@@ -27,5 +27,5 @@ export interface PrinterPlugin {
   addListener(
     eventName: 'printerStatus',
     listenerFunc: (status: PrinterStatus) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 }
