@@ -31,35 +31,43 @@ public class PrinterPlugin extends Plugin {
     // 打印头过热异常
     public final static String OVER_HEATING_ACITON = "printer_normal_heat";
 
-    private ServiceConnection connService = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            printerInterface = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            printerInterface = PrinterInterface.Stub.asInterface(service);
-        }
-    };
     private PrinterInterface printerInterface;
 
     private PrinterReceiver receiver = new PrinterReceiver();
 
+    private PrinterInterface getPrinterInterface() {
+        if (printerInterface == null) {
+            Intent intent = new Intent();
+            intent.setClassName("recieptservice.com.recieptservice", "recieptservice.com.recieptservice.service.PrinterService");
+            getContext().startService(intent);
+            getContext().bindService(intent, new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    printerInterface = PrinterInterface.Stub.asInterface(service);
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    printerInterface = null;
+                }
+            }, Context.BIND_AUTO_CREATE);
+        }
+        return printerInterface;
+    }
+
+    @Override
     public void load() {
-        Intent intent = new Intent();
-        intent.setClassName("recieptservice.com.recieptservice", "recieptservice.com.recieptservice.service.PrinterService");
-        getContext().startService(intent);
-        getContext().bindService(intent, connService, Context.BIND_AUTO_CREATE);
+        receiver = new PrinterReceiver(this);
         IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(OUT_OF_PAPER_ACTION);
         mFilter.addAction(NORMAL_ACTION);
         mFilter.addAction(OVER_HEATING_ACITON);
-        getContext().registerReceiver(receiver, mFilter,2);
+        getContext().registerReceiver(receiver, mFilter);
     }
 
     @PluginMethod
     public void printEpson(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 JSArray dataArray = call.getArray("data");
@@ -72,11 +80,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException | JSONException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void printText(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 String text = call.getString("text");
@@ -85,11 +96,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void printBarCode(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 String data = call.getString("data");
@@ -101,11 +115,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void printQRCode(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 String data = call.getString("data");
@@ -116,11 +133,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void setAlignment(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 int alignment = call.getInt("alignment");
@@ -129,11 +149,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void setTextSize(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 float textSize = call.getFloat("textSize");
@@ -147,6 +170,7 @@ public class PrinterPlugin extends Plugin {
 
     @PluginMethod
     public void nextLine(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 int line = call.getInt("line");
@@ -160,6 +184,7 @@ public class PrinterPlugin extends Plugin {
 
     @PluginMethod
     public void printTableText(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 JSArray textArray = call.getArray("text");
@@ -187,11 +212,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException | JSONException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void setTextBold(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 boolean bold = call.getBoolean("bold");
@@ -200,11 +228,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void setDark(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 int value = call.getInt("value");
@@ -213,11 +244,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void setLineHeight(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 float lineHeight = call.getFloat("lineHeight");
@@ -226,11 +260,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void setTextDoubleWidth(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 boolean enable = call.getBoolean("enable");
@@ -239,11 +276,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void setTextDoubleHeight(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 boolean enable = call.getBoolean("enable");
@@ -252,11 +292,14 @@ public class PrinterPlugin extends Plugin {
             } catch (RemoteException e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
     }
 
     @PluginMethod
     public void printBASE64PNG(PluginCall call) {
+        getPrinterInterface();
         if (printerInterface != null) {
             try {
                 String pic = call.getString("pic");
@@ -267,7 +310,64 @@ public class PrinterPlugin extends Plugin {
             } catch (Exception e) {
                 call.reject(e.getMessage());
             }
+        } else {
+            call.reject("Printer service not connected");
         }
+    }
+
+    @PluginMethod
+    public void checkStatus(PluginCall call) {
+        if (printerInterface != null) {
+            call.resolve();
+        } else {
+            call.reject("Printer service not connected");
+        }
+    }
+
+    @PluginMethod
+    public void start(PluginCall call) {
+        getPrinterInterface();
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void stop(PluginCall call) {
+        if (printerInterface != null) {
+            getContext().unbindService(new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                }
+            });
+            printerInterface = null;
+        }
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void connect(PluginCall call) {
+        getPrinterInterface();
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void disconnect(PluginCall call) {
+        if (printerInterface != null) {
+            getContext().unbindService(new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                }
+            });
+            printerInterface = null;
+        }
+        call.resolve();
     }
 
     @PluginMethod

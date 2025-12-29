@@ -11,7 +11,7 @@ A Capacitor plugin for Senraise thermal printers. This plugin allows you to prin
 ## Installation
 
 ```bash
-npm install capacitor-senraise-printer
+npm install capacitor-senraise-printer@latest
 npx cap sync
 ```
 
@@ -26,6 +26,8 @@ export class ReceiptPrinter {
 
   async printReceipt() {
     try {
+      await Printer.start();
+      await Printer.connect();
       await Printer.setTextSize({ textSize: 28.0 });
       await Printer.setAlignment({ alignment: 1 }); // Center
       await Printer.setTextBold({ bold: true });
@@ -67,6 +69,9 @@ export class ReceiptPrinter {
       });
       await Printer.nextLine({line : 4});
 
+      await Printer.disconnect();
+      await Printer.stop();
+
     } catch (error) {
       console.error('Error printing receipt:', error);
     }
@@ -75,6 +80,51 @@ export class ReceiptPrinter {
 ```
 
 ## API Reference
+
+<details>
+<summary><b>checkStatus()</b></summary>
+<p>
+
+Checks the connection status of the printer.
+
+</p>
+</details>
+
+<details>
+<summary><b>start()</b></summary>
+<p>
+
+Starts the printer service.
+
+</p>
+</details>
+
+<details>
+<summary><b>stop()</b></summary>
+<p>
+
+Stops the printer service.
+
+</p>
+</details>
+
+<details>
+<summary><b>connect()</b></summary>
+<p>
+
+Connects to the printer.
+
+</p>
+</details>
+
+<details>
+<summary><b>disconnect()</b></summary>
+<p>
+
+Disconnects from the printer.
+
+</p>
+</details>
 
 <details>
 <summary><b>printEpson(options: { data: number[] })</b></summary>
@@ -179,6 +229,27 @@ Adds a specified number of empty lines.
 | Param  | Type     | Description                               |
 | :----- | :------- | :---------------------------------------- |
 | `line` | `number` | The number of lines to feed.              |
+
+</p>
+</details>
+
+## Events
+
+<details>
+<summary><b>printerStatus</b></summary>
+<p>
+
+Listens for printer status events.
+
+**Returns:** `PluginListenerHandle`
+
+```typescript
+import { Printer } from 'capacitor-senraise-printer';
+
+Printer.addListener('printerStatus', (status) => {
+  console.log('Printer status:', status);
+});
+```
 
 </p>
 </details>

@@ -1,5 +1,20 @@
 import { WebPlugin } from '@capacitor/core';
 export class PrinterWeb extends WebPlugin {
+    async checkStatus() {
+        return Promise.resolve({ isConnected: false });
+    }
+    async start() {
+        throw this.unimplemented('Not implemented on web.');
+    }
+    async stop() {
+        throw this.unimplemented('Not implemented on web.');
+    }
+    async connect() {
+        throw this.unimplemented('Not implemented on web.');
+    }
+    async disconnect() {
+        throw this.unimplemented('Not implemented on web.');
+    }
     async printEpson(options) {
         console.log('printEpson', options);
         throw this.unimplemented('Not implemented on web.');

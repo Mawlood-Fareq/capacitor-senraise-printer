@@ -1,4 +1,13 @@
+import type { PluginListenerHandle } from '@capacitor/core';
+export interface PrinterStatus {
+  status: string;
+}
 export interface PrinterPlugin {
+  checkStatus(): Promise<{ isConnected: boolean }>;
+  start(): Promise<void>;
+  stop(): Promise<void>;
+  connect(): Promise<void>;
+  disconnect(): Promise<void>;
   printEpson(options: { data: number[] }): Promise<void>;
   printText(options: { text: string }): Promise<void>;
   printBarCode(options: { data: string, symbology: number, height: number, width: number }): Promise<void>;
@@ -14,4 +23,9 @@ export interface PrinterPlugin {
   setTextDoubleHeight(options: { enable: boolean }): Promise<void>;
   printBASE64PNG(options: { pic: string }): Promise<void>;
   test(): Promise<void>;
+
+  addListener(
+    eventName: 'printerStatus',
+    listenerFunc: (status: PrinterStatus) => void,
+  ): PluginListenerHandle;
 }

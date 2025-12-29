@@ -1,2 +1,2 @@
-export { P as Printer } from './index-45c7c73f.js';
+export { P as Printer } from './index-BtYMP1wm.js';
 //# sourceMappingURL=index.js.map

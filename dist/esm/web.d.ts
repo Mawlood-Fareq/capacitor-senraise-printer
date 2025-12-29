@@ -1,6 +1,13 @@
 import { WebPlugin } from '@capacitor/core';
 import type { PrinterPlugin } from './definitions';
 export declare class PrinterWeb extends WebPlugin implements PrinterPlugin {
+    checkStatus(): Promise<{
+        isConnected: boolean;
+    }>;
+    start(): Promise<void>;
+    stop(): Promise<void>;
+    connect(): Promise<void>;
+    disconnect(): Promise<void>;
     printEpson(options: {
         data: number[];
     }): Promise<void>;

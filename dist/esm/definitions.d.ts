@@ -1,4 +1,11 @@
 export interface PrinterPlugin {
+    checkStatus(): Promise<{
+        isConnected: boolean;
+    }>;
+    start(): Promise<void>;
+    stop(): Promise<void>;
+    connect(): Promise<void>;
+    disconnect(): Promise<void>;
     printEpson(options: {
         data: number[];
     }): Promise<void>;

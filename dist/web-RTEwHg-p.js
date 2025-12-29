@@ -1,6 +1,21 @@
-import { W as WebPlugin } from './index-45c7c73f.js';
+import { W as WebPlugin } from './index-BtYMP1wm.js';
 
 class PrinterWeb extends WebPlugin {
+    async checkStatus() {
+        return Promise.resolve({ isConnected: false });
+    }
+    async start() {
+        throw this.unimplemented('Not implemented on web.');
+    }
+    async stop() {
+        throw this.unimplemented('Not implemented on web.');
+    }
+    async connect() {
+        throw this.unimplemented('Not implemented on web.');
+    }
+    async disconnect() {
+        throw this.unimplemented('Not implemented on web.');
+    }
     async printEpson(options) {
         console.log('printEpson', options);
         throw this.unimplemented('Not implemented on web.');
@@ -63,4 +78,4 @@ class PrinterWeb extends WebPlugin {
 }
 
 export { PrinterWeb };
-//# sourceMappingURL=web-9590b07f.js.map
+//# sourceMappingURL=web-RTEwHg-p.js.map

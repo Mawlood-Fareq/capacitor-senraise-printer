@@ -5,26 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.getcapacitor.Bridge;
+import com.getcapacitor.JSObject;
 
 public class PrinterReceiver extends BroadcastReceiver {
-    private Bridge bridge;
+    private final PrinterPlugin plugin;
 
-    public PrinterReceiver() {
-    }
-
-    public PrinterReceiver(Bridge bridge) {
-        this.bridge = bridge;
+    public PrinterReceiver(PrinterPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     public void onReceive(Context context, Intent data) {
         String action = data.getAction();
-        String type = "PrinterStatus";
         Log.d("PrinterReceiver", action);
 
-        if (bridge != null) {
-            bridge.triggerJSEvent("printerStatus", "window", "{ \"status\": \"" + action + "\" }");
+        if (plugin != null) {
+            JSObject ret = new JSObject();
+            ret.put("status", action);
+            plugin.notifyListeners("printerStatus", ret, true);
         }
     }
 }
