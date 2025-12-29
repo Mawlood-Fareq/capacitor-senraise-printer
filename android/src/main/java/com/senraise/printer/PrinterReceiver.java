@@ -22,7 +22,10 @@ public class PrinterReceiver extends BroadcastReceiver {
         if (plugin != null) {
             JSObject ret = new JSObject();
             ret.put("status", action);
-            plugin.notifyListeners("printerStatus", ret, true);
+            
+            // Call the public wrapper method instead of notifyListeners
+            // plugin.handlePrinterStatus(ret);
+            // plugin.notifyListeners("printerStatus", ret, true);
         }
     }
 }

@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.graphics.BitmapFactory;
 
 import com.getcapacitor.JSArray;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -24,16 +25,17 @@ import recieptservice.com.recieptservice.PrinterInterface;
 @CapacitorPlugin(name = "Printer")
 public class PrinterPlugin extends Plugin {
 
-    // 缺纸异常
+    // Paper shortage
     public final static String OUT_OF_PAPER_ACTION = "printer_paper_not_ready";
-    // 可以打印
+    // Can print
     public final static String NORMAL_ACTION = "printer_paper_ready";
-    // 打印头过热异常
+    // Printer head overheating exception
     public final static String OVER_HEATING_ACITON = "printer_normal_heat";
 
     private PrinterInterface printerInterface;
 
-    private PrinterReceiver receiver = new PrinterReceiver();
+    // private PrinterReceiver receiver = new PrinterReceiver();
+    private PrinterReceiver receiver;
 
     private PrinterInterface getPrinterInterface() {
         if (printerInterface == null) {
@@ -374,4 +376,12 @@ public class PrinterPlugin extends Plugin {
     public void test(PluginCall call) {
         call.resolve();
     }
+
+    // /**
+    //  * Public wrapper to expose the protected notifyListeners method
+    //  * to the BroadcastReceiver.
+    //  */
+    // public void handlePrinterStatus(JSObject data) {
+    //     notifyListeners("printerStatusChanged", data);
+    // }
 }

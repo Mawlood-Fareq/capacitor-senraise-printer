@@ -1,35 +1,12 @@
 import { WebPlugin } from '@capacitor/core';
 import type { PrinterPlugin } from './definitions';
-import type { PluginListenerHandle } from '@capacitor/core';
 
 export class PrinterWeb extends WebPlugin implements PrinterPlugin {
-  
-  async addListener(
-    eventName: string,
-    listenerFunc: (...args: any[]) => void,
-  ): Promise<PluginListenerHandle> {
-    throw this.unimplemented('addListener not implemented on web.');
-  }
-
-  async checkStatus(): Promise<{ isConnected: boolean }> {
-    return Promise.resolve({ isConnected: false });
-  }
-
-  async start(): Promise<void> {
-    throw this.unimplemented('Not implemented on web.');
-  }
-
-  async stop(): Promise<void> {
-    throw this.unimplemented('Not implemented on web.');
-  }
 
   async connect(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async disconnect(): Promise<void> {
-    throw this.unimplemented('Not implemented on web.');
-  }
   async printEpson(options: { data: number[] }): Promise<void> {
     console.log('printEpson', options);
     throw this.unimplemented('Not implemented on web.');
@@ -75,32 +52,9 @@ export class PrinterWeb extends WebPlugin implements PrinterPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async setDark(options: { value: number }): Promise<void> {
-    console.log('setDark', options);
-    throw this.unimplemented('Not implemented on web.');
-  }
-
-  async setLineHeight(options: { lineHeight: number }): Promise<void> {
-    console.log('setLineHeight', options);
-    throw this.unimplemented('Not implemented on web.');
-  }
-
-  async setTextDoubleWidth(options: { enable: boolean }): Promise<void> {
-    console.log('setTextDoubleWidth', options);
-    throw this.unimplemented('Not implemented on web.');
-  }
-
-  async setTextDoubleHeight(options: { enable: boolean }): Promise<void> {
-    console.log('setTextDoubleHeight', options);
-    throw this.unimplemented('Not implemented on web.');
-  }
-
   async printBASE64PNG(options: { pic: string }): Promise<void> {
     console.log('printBASE64PNG', options);
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async test(): Promise<void> {
-    throw this.unimplemented('Not implemented on web.');
-  }
 }

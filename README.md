@@ -1,22 +1,21 @@
 # Capacitor Senraise Printer
-
 A Capacitor plugin for Senraise thermal printers. This plugin allows you to print text, barcodes, QR codes, and images from your Capacitor application to a connected Senraise printer.
 
-## Supported Platforms
 
+## Supported Platforms
 [![Android](https://img.shields.io/badge/Android-Supported-brightgreen.svg)](https://capacitorjs.com/docs/android)
 [![iOS](https://img.shields.io/badge/iOS-Not%20Supported-red.svg)](https://capacitorjs.com/docs/ios)
 [![Web](https://img.shields.io/badge/Web-Not%20Supported-red.svg)](https://capacitorjs.com/docs/web)
 
-## Installation
 
+## Install
 ```bash
-npm install capacitor-senraise-printer@latest
+npm install capacitor-senraise-printer
 npx cap sync
 ```
 
-## Usage Example
 
+## Usage Example
 Here's an example of how to print a simple receipt:
 
 ```typescript
@@ -24,10 +23,16 @@ import { Printer } from 'capacitor-senraise-printer';
 
 export class ReceiptPrinter {
 
+  init() {
+    Printer.connect().then(() => {
+      console.log("Printer connected successfully");
+    }).catch((error) => {
+      console.error("Failed to connect to printer:", error);
+    });
+  }
+
   async printReceipt() {
     try {
-      await Printer.start();
-      await Printer.connect();
       await Printer.setTextSize({ textSize: 28.0 });
       await Printer.setAlignment({ alignment: 1 }); // Center
       await Printer.setTextBold({ bold: true });
@@ -69,9 +74,6 @@ export class ReceiptPrinter {
       });
       await Printer.nextLine({line : 4});
 
-      await Printer.disconnect();
-      await Printer.stop();
-
     } catch (error) {
       console.error('Error printing receipt:', error);
     }
@@ -79,53 +81,53 @@ export class ReceiptPrinter {
 }
 ```
 
+
 ## API Reference
 
-<details>
-<summary><b>checkStatus()</b></summary>
-<p>
-
-Checks the connection status of the printer.
-
-</p>
-</details>
-
-<details>
-<summary><b>start()</b></summary>
-<p>
-
-Starts the printer service.
-
-</p>
-</details>
-
-<details>
-<summary><b>stop()</b></summary>
-<p>
-
-Stops the printer service.
-
-</p>
-</details>
-
+<!-- CONNECT -->
 <details>
 <summary><b>connect()</b></summary>
 <p>
 
-Connects to the printer.
+Initializes and connects to the Senraise thermal printer.
 
+This method <b>only needs to be called once</b>, typically when the application starts (for example, in ```AppComponent```, ```main.ts```, or the first screen of your app).
+
+##### Note
+````
+⚠️ Important: `Printer.connect()` is a one-time initialization.
+Once connected, you can print from any page without reconnecting, as long as the app is not closed.
+````
 </p>
+
+###### example :
+```typescript
+import { Printer } from 'capacitor-senraise-printer';
+
+function initPrinter() {
+  Printer.connect().then(() => {
+    console.log("Printer connected successfully");
+  }).catch((error) => {
+    console.error("Failed to connect to printer:", error);
+  });
+}
+```
+or
+```typescript
+import { Printer } from 'capacitor-senraise-printer';
+
+async function initPrinter() {
+  try {
+    await Printer.connect();
+    console.log('Printer connected successfully');
+  } catch (error) {
+    console.error('Failed to connect to printer:', error);
+  }
+}
+```
 </details>
 
-<details>
-<summary><b>disconnect()</b></summary>
-<p>
-
-Disconnects from the printer.
-
-</p>
-</details>
-
+<!-- EPSON -->
 <details>
 <summary><b>printEpson(options: { data: number[] })</b></summary>
 <p>
@@ -137,8 +139,34 @@ Prints raw ESC/POS (Epson Standard Code) commands. This is useful for advanced p
 | **`data`** | `number[]` | An array of byte values representing the ESC/POS commands. |
 
 </p>
+
+###### example :
+```typescript
+Printer.printEpson({
+  data: [
+    0x1B, 0x40, // Initialize printer
+    0x1B, 0x61, 0x01, // Center alignment
+    0x1B, 0x45, 0x01, // Bold on
+    0x1D, 0x21, 0x00, // Change Text size to 22
+    // "Mawlood Fareq" in ASCII
+    0x4D, 0x61, 0x77, 0x6C, 0x6F, 0x6F, 0x64, 0x20,
+    0x46, 0x61, 0x72, 0x65, 0x71,
+    0x0A, // New line
+    0x1D, 0x21, 0x11, // Double width and height
+    0x1D, 0x21, 0x00, // Normal size
+    0x1B, 0x45, 0x00, // Bold off
+    0x1B, 0x61, 0x00, // Left alignment
+    // "Hello, World!" in ASCII
+    0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x20,
+    0x57, 0x6F, 0x72, 0x6C, 0x64, 0x21,
+    0x0A, // New line
+    // 0x1D, 0x56, 0x00 // Cut paper
+  ]
+})
+```
 </details>
 
+<!-- TEXT -->
 <details>
 <summary><b>printText(options: { text: string })</b></summary>
 <p>
@@ -150,8 +178,14 @@ Prints a string of text.
 | **`text`** | `string` | The text to print. Use `\n` for new lines. |
 
 </p>
+
+###### example :
+```typescript
+Printer.printText({ text: '123 Main Street\n' });
+```
 </details>
 
+<!-- BARCODE -->
 <details>
 <summary><b>printBarCode(options: { data: string, symbology: number, height: number, width: number })</b></summary>
 <p>
@@ -166,8 +200,14 @@ Prints a barcode.
 | `width`     | `number` | The width of the barcode. The value range is 1-4.                                                                        |
 
 </p>
+
+###### example :
+```typescript
+printBarCode({ data: "ABC-12345", symbology: 8, height: 60, width: 2 });
+```
 </details>
 
+<!-- QR -->
 <details>
 <summary><b>printQRCode(options: { data: string, modulesize: number, errorlevel: number })</b></summary>
 <p>
@@ -181,8 +221,14 @@ Prints a QR code.
 | `errorlevel` | `number` | The error correction level. The value range is 0-3, representing L, M, Q, H. |
 
 </p>
+
+###### example :
+```typescript
+printQRCode({ data: "https://your-website.com", modulesize: 8, errorlevel: 1 });
+```
 </details>
 
+<!-- ALIGNMENT -->
 <details>
 <summary><b>setAlignment(options: { alignment: number })</b></summary>
 <p>
@@ -193,8 +239,14 @@ Sets the text alignment.
 | :---------- | :------- | :---------------------------------------------------------------- |
 | `alignment` | `number` | The alignment style. `0` for left, `1` for center, `2` for right. |
 </p>
+
+###### example :
+```typescript
+Printer.setAlignment({ alignment: 2 });
+```
 </details>
 
+<!-- SIZE -->
 <details>
 <summary><b>setTextSize(options: { textSize: number })</b></summary>
 <p>
@@ -203,10 +255,17 @@ Sets the text size.
 
 | Param      | Type     | Description                                                          |
 | :--------- | :------- | :------------------------------------------------------------------- |
-| `textSize` | `number` | The size of the text, e.g., `18.0` for normal, `28.0` for large. |
+| `textSize` | `number` | The size of the text, e.g., `18` for normal, `28` for large. |
 </p>
+
+###### example :
+```typescript
+Printer.setTextSize({ textSize: 24 });
+```
 </details>
 
+
+<!-- BOLD -->
 <details>
 <summary><b>setTextBold(options: { bold: boolean })</b></summary>
 <p>
@@ -218,8 +277,15 @@ Sets the text to bold or normal.
 | `bold` | `boolean` | `true` for bold text, `false` for normal. |
 
 </p>
+
+###### example :
+```typescript
+Printer.setTextBold({ bold: true });
+```
 </details>
 
+
+<!-- NEXT LINE -->
 <details>
 <summary><b>nextLine(options: { line: number })</b></summary>
 <p>
@@ -231,28 +297,14 @@ Adds a specified number of empty lines.
 | `line` | `number` | The number of lines to feed.              |
 
 </p>
-</details>
 
-## Events
-
-<details>
-<summary><b>printerStatus</b></summary>
-<p>
-
-Listens for printer status events.
-
-**Returns:** `PluginListenerHandle`
-
+###### example :
 ```typescript
-import { Printer } from 'capacitor-senraise-printer';
-
-Printer.addListener('printerStatus', (status) => {
-  console.log('Printer status:', status);
-});
+Printer.nextLine({line : 4});
 ```
-
-</p>
 </details>
+
+
 
 ## Platform Specific Configuration
 

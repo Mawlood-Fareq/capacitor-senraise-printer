@@ -1,34 +1,25 @@
 {
   "name": "capacitor-senraise-printer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Capacitor plugin for Senraise printers",
-  "main": "dist/plugin.js",
+  "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
-  "type": "module",
-  "scripts": {
-    "build": "npm run clean && tsc && rollup -c rollup.config.js",
-    "clean": "rimraf dist",
-    "watch": "tsc --watch"
-  },
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/"
+  ],
   "author": "Mawlood Fareq Mahmood",
   "license": "MIT",
-  "dependencies": {
-    "@capacitor/core": "^8.0.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mawlood-Fareq/capacitor-senraise-printer"
   },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^29.0.0",
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "rimraf": "^6.1.2",
-    "rollup": "^4.54.0",
-    "typescript": "^5.9.3"
+  "bugs": {
+    "url": "https://github.com/Mawlood-Fareq/capacitor-senraise-printer/issues"
   },
-  "files": [
-    "dist/",
-    "android/",
-    "ios/",
-    "capacitor-senraise-printer.podspec"
-  ],
   "keywords": [
     "senraise",
     "printer",
@@ -36,6 +27,30 @@
     "capacitor",
     "native"
   ],
+  "scripts": {
+    "build": "npm run clean && tsc && rollup -c rollup.config.mjs",
+    "clean": "rimraf ./dist"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/docgen": "^0.3.1",
+    "@ionic/eslint-config": "^0.4.0",
+    "@ionic/prettier-config": "^4.0.0",
+    "eslint": "^8.57.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-java": "^2.7.7",
+    "rimraf": "^6.1.0",
+    "rollup": "^4.53.2",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@capacitor/core": ">=8.0.0"
+  },
+  "prettier": "@ionic/prettier-config",
+  "eslintConfig": {
+    "extends": "@ionic/eslint-config/recommended"
+  },
   "capacitor": {
     "android": {
       "src": "android"

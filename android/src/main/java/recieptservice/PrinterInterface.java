@@ -72,19 +72,19 @@ public interface PrinterInterface extends android.os.IInterface
     {
       return false;
     }
-    /**   检卡接口 */
+    /**   Card detection interface */
     @Override public void checkPSAMCard(int timeout, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException
     {
     }
-    /**   激活接口 */
+    /**   Activation Interface */
     @Override public void activatePSAMCard(int timeout, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException
     {
     }
-    /**   反激活接口 */
+    /**   Deactivation interface */
     @Override public void deactivatePSAMCard(int timeout, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException
     {
     }
-    /**   通信接口 */
+    /**   Communication interface */
     @Override public void transmitPSAMCard(int timeout, byte[] data, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException
     {
     }
@@ -833,13 +833,13 @@ public interface PrinterInterface extends android.os.IInterface
   public void setCode(java.lang.String code) throws android.os.RemoteException;
   public void print128BarCode(java.lang.String data, int type, int height, int width) throws android.os.RemoteException;
   public boolean getScannerStatus() throws android.os.RemoteException;
-  /**   检卡接口 */
+  /**   Card detection interface */
   public void checkPSAMCard(int timeout, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException;
-  /**   激活接口 */
+  /**   Activation interface */
   public void activatePSAMCard(int timeout, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException;
-  /**   反激活接口 */
+  /**   Deactivation interface */
   public void deactivatePSAMCard(int timeout, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException;
-  /**   通信接口 */
+  /**   Communication interface */
   public void transmitPSAMCard(int timeout, byte[] data, recieptservice.com.recieptservice.PSAMCallback callback) throws android.os.RemoteException;
   /** @hide */
   static class _Parcel {
